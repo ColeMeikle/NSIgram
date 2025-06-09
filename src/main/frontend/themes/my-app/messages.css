@@ -1,0 +1,356 @@
+#viewAllChatsContainer{
+    border-color:rgb(244, 244, 244);
+    border-right:solid;
+    width: 30vw;
+    height:calc(100vh - 57px);
+}
+
+#activeChatContainer{
+    width: 70vw;
+    height: calc(100vh - 57px);/*Adjusts for height of top navbar*/
+    margin-left: -16px;
+}
+
+.viewAllChatsRow{
+    width: 100%;
+}
+
+.currentUserHeader{
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+}
+
+.createNewChatButton{
+    margin: 20px;
+    background-color: transparent;
+    color: black;
+}
+
+.createNewChatButton:hover{
+    background-color: transparent !important;
+}
+
+.createNewChatButton vaadin-icon{
+    width: 30px;
+    height: 30px;
+    padding: 0px;
+}
+
+.chatThumbnailSmall{
+    width:70px;
+    height:auto;
+    aspect-ratio: 1/1;
+    border-radius:50%;
+}
+
+.chatThumbnailLarge{
+    width: 75px;
+    height:auto;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+
+.chatNameSmall{
+    font-size:1em;
+    margin-left: 10px;
+}
+
+@media (max-width: 600px) {
+    #viewAllChatsContainer{
+        width:20% !important;
+    }
+
+    #activeChatContainer{
+        width:80% !important;
+    }
+
+    .chatNameSmall{
+        display: none !important;
+    }
+
+    .chatThumbnailSmall{
+        width: 75px;
+        max-width: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .currentUserHeader{
+        display: none !important;
+    }
+}
+
+.activeChatHeaderContainer{
+    border-bottom: solid lightgray;
+    width:99%;
+    height:50px;
+    padding:50px;
+}
+
+.activeChatTitle{
+    font-size: 1.5em;
+    margin-left: max(20px, 5%);
+}
+
+.noActiveChatContainer{
+    margin-top:25vh;
+}
+
+.noActiveChatImg{
+    width:100px;
+    height:auto;
+    aspect-ratio: 1/1;
+}
+
+.noActiveChatLabel{
+    font-size:2em;
+}
+
+.noActiveChatSubtext{
+    font-size:1em;
+    font-weight:normal;
+    text-align: center;
+}
+
+.activeChatMessagesContainer{
+    height:calc(100vh - 101.5px - 100px - 57px);/*Adjust for height of active chat header and top navbar*/
+    width: 100%;
+    overflow: auto;
+}
+
+.chatSettingsButton{
+    color: rgb(50,50,50);
+    background-color:transparent;
+    padding:0px;
+}
+
+.chatSettingsButton:hover{
+    cursor:pointer;
+}
+
+.chatSettingsButton vaadin-icon {
+    width: 30px;
+    height: 30px;
+    padding:0px;
+}
+
+.sendMessagesOuterContainer{
+    width:100%;
+    height: 100px;
+    border-top: solid lightgray;
+    border-radius: 5px;
+    padding: 0px;
+}
+
+.sendMessagesInnerContainer{
+    height: 100%;
+}
+
+.sendMessageInput{
+    width: 70%;
+}
+
+.sendMessageInput::part(input-field){
+    margin-left: 10%;
+    border-radius:5px;
+    width: max(100%, 200px);
+    height: 100%;
+}
+
+.sendMessageButton{
+    background: rgb(41, 133, 255);
+    color: white;
+    width: 80px;
+    border-radius: 10px;
+    margin-left: 60px;
+}
+
+.timeHeader{
+    color: gray;
+}
+
+.messageRow{
+    max-width: 300px;
+    width: fit-content;
+    margin-bottom: 25px;
+    box-sizing: border-box;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.messageThumbnail{
+    width:40px;
+    height:auto;
+    aspect-ratio: 1/1;
+    border-radius:50%;
+    margin-left: 5px;
+    margin-bottom:5px;
+}
+
+.messageContent{
+    background-color: lightgray;
+    border-radius: 10px;
+    padding: 0px 10px 0px 10px;
+    margin-right: 15px;
+    padding-bottom: 2px;
+    max-width: calc(300px - 45px);
+    width: fit-content;
+    min-width: 0;
+}
+
+.ownMessageContent{
+    margin-right: 0px !important;
+}
+
+.continuedMessageContent{/*For a second straight message from a user*/
+    margin-left: 61px;
+    margin-top: -37px;
+}
+
+.messageUsername{
+    font-size: 0.75em;
+    font-weight:normal;
+    margin-top:-15px;
+}
+
+.messageTimestamp{
+    font-size: 0.75em;
+    font-weight: lighter;
+    margin-top: -16px;
+    margin-left: 10px;
+    margin-right: 10px;
+    white-space: nowrap;
+    overflow:hidden;
+}
+
+.messageText{
+    font-size: 1em;
+    font-weight:normal;
+}
+
+.updateChatNameInput{
+    width: 70%;
+}
+
+.updateChatNameButton{
+    margin-top: 37px;
+}
+
+.chatMemberPicture{
+    width: 45px;
+    height: auto;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+
+.chatMemberName{
+    font-size:1.5em;
+}
+
+.editChatLayout{
+    height: 500px;
+}
+
+.chatMembersLabel{
+    font-size:1.25em;
+    font-weight:normal;
+    margin-top:20px;
+    margin-bottom:-15px;
+    margin-left: 10px;
+}
+
+.chatMembersGrid{
+    margin-top:20px;
+    max-height: 159px;/*Three users(53px each)*/
+}
+
+.addUserButton:hover{
+    cursor:pointer;
+}
+
+.popularPublicChatsHeader{
+    font-size: 2em;
+    font-weight:bold;
+}
+
+.browsePublicChatsContainer{
+    display: flex;
+    flex-wrap: nowrap;
+    height: 200px;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.publicChatContainer{
+    min-width: 250px !important;
+    height: 200px;
+    border-radius: 5px;
+    border: solid darkgray;
+    position: relative;
+}
+
+.publicChatThumbnail{
+    width: 40px;
+    height: auto;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+
+.publicChatTitle{
+    font-size: 1.5em;
+    font-weight: normal;
+}
+
+.publicChatCreatedBy{
+    font-size: 1em;
+    font-weight: normal;
+}
+
+.publicChatFooter{
+    position: absolute;
+    bottom: 0;
+}
+
+.publicChatUserCount{
+    font-size: 0.8em;
+    font-weight: lighter;
+}
+
+.publicChatJoinButton{
+    margin-right: 30px;
+    margin-bottom: 10px;
+}
+
+.createPublicChatContainer{
+    border:dashed !important;
+    min-width: 200px !important;
+}
+
+.createPublicChatContainer:hover{
+    background-color: rgb(240,240,240);
+}
+
+.createPublicChatContainer:active{
+    background-color: rgb(230,230,230);
+}
+
+.createNewChatIcon{
+    width: 100px;
+    height: 100px;
+    color: black;
+}
+
+.invisible{
+    display: none !important;
+}
+
+.hidden{
+    visibility: hidden !important;
+}
+
+.chatGrid{
+    height: calc(100vh - 133px);/*Adjust for height of title and navbar*/
+}

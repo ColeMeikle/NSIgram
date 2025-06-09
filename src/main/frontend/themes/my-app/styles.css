@@ -1,1 +1,99 @@
 @import url('./main-layout.css');
+@import url('./profile.css');
+@import url('./editProfile.css');
+@import url('./messages.css');
+
+.login-bg{
+    background-color:#9fcfd7;
+    /*possible colours: Blue-ish white(#ededfa),lavender(#E6E6FA), light green/blue(#E0F7FA) */
+    /*Dark mode colours: Deep blue(#1E1E2F), Dark gray(#121212)*/
+}
+
+.login-box{
+    margin-left:37.5vw;
+    margin-right:37.5vw;
+    background-color:white;
+    height:auto;
+    width:min(90%,400px);
+    border-radius:4px;
+}
+
+.login-header{
+    padding-top:10%;
+    text-align: center;
+    font-size:2.5em;
+    font-family: "Monaco", monospace;
+}
+
+.login-input, #username, #password{
+    margin-left: 10%;
+    margin-right:10%;
+    margin-top:min(50px, 1.5vh);
+    width:80%;
+    padding:10px;
+    padding-right:40px;
+    /*background-color: rgba(200,200,200, 0.6);*/
+    border-radius:2px;
+    border:none;
+    color:black;
+    outline:none;
+}
+
+.login-input:focus, #username:focus, #password:focus{
+    border: 2px solid black;
+    background-color: rgba(230,230,230,1);
+}
+
+.login-input::placeholder, #username::placeholder, #password::placeholder{
+    color:rgb(150,150,150);
+}
+
+.submit-button{
+    margin-top:30px;
+    margin-left:10%;
+    margin-right:10%;
+    margin-bottom:20px;
+    padding:12px;
+    height:max(8%, 50px);
+    width:80%;
+    border-radius:10px;
+    background-color:rgb(220,220,220);
+    border:none;
+    cursor: pointer;
+    font-size:1em;
+}
+
+.submit-button:hover{
+    background-color:rgb(180,180,180);
+}
+
+p.newAccount_link{
+    display:inline-block;
+    margin-left:20%;
+    margin-right:2%;
+    margin-bottom:20px;
+}
+a.newAccount_link{
+    margin-bottom:20px;
+}
+#error-msg{
+    color:red;
+    margin-left:10%;
+    margin-top:5px;
+    margin-bottom:0px;
+}
+.error::part(input-field){
+    background-color: rgba(230, 154, 154, 0.7)!important;
+}
+
+.signOutFooter{
+  position:absolute;
+  bottom: 100px;
+  left: 25%;
+  width: 50%;
+}
+
+.signOutButton{
+  margin: auto;
+  width: 100%;
+}

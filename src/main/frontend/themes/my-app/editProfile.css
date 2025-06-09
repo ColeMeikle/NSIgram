@@ -1,0 +1,75 @@
+.usernameContainer{
+    width:90%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: solid;
+    border-color:rgb(220,220,220);
+}
+
+.editProfileInput{
+    width:40%;
+    margin-right: 5%;
+}
+
+.editBioInput{
+    width:60%;
+    height:auto;
+    aspect-ratio: 5/1;
+    margin-right: 5%;
+}
+
+.editProfileError{
+    color: red;
+    font-size: 0.9em;
+    margin-top: 4px;
+    margin-left: 5px;
+    display: block;
+    visibility:hidden;
+}
+
+.editProfileInput.error::part(input-field){
+    background-color: rgba(230, 154, 154, 0.7)!important;
+}
+
+.editProfileError.visible{
+    visibility:visible;
+}
+
+.editProfileButton{
+    --vaadin-button-text-color: black;
+    --vaadin-button-background: rgb(242,242,242);
+    border-radius:6px;
+
+    margin: auto;
+    position: absolute;
+    top: 23%; left: 75%; bottom: 0; right: 0;/*top of 55% vertically aligns it with the text input, left should be 100 - width - padding on the right*/
+    width: 20%;
+}
+.editProfileButton:hover{
+    --vaadin-button-background: rgb(220,220,220);
+}
+.editProfileButton:active{
+    --vaadin-button-text-color: gray;
+    --vaadin-button-background: rgb(242,242,242);
+}
+.pfpUpload{
+    margin-bottom:20px;
+}
+.pfpUploadLabel{
+    font-size:1.1em;
+}
+.pfpUploadHint{
+    margin-left:5px;
+    font-size:0.75em;
+    color:var(--lumo-secondary-text-color);
+}
+.editProfileExistingProfilePic{
+    width: max(10%, 100px);
+    height: auto;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    margin-right:30px;
+    object-fit: cover;
+}
