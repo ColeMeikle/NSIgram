@@ -286,6 +286,7 @@
 
 .publicChatContainer{
     min-width: 250px !important;
+    max-width: 250px !important;
     height: 200px;
     border-radius: 5px;
     border: solid darkgray;

@@ -7,10 +7,11 @@ import java.sql.Statement;
 
 public class Database {
     // No static connection - create fresh each time
+    //Run in terminal: export $(cat .env | xargs)
     public static Connection getConnection() throws SQLException {
-        String url = "jdbc:postgresql://aws-0-us-west-1.pooler.supabase.com:6543/postgres?prepareThreshold=0";
-        String user = "postgres.zxrwcyxrtjcobknxopsb";
-        String password = "APCSDatabase101"; // Try to figure out how to hide this later
+        String url = System.getenv("DB_URL");
+        String user = System.getenv("DB_USER");
+        String password = System.getenv("DB_PASSWORD");
         
         return DriverManager.getConnection(url, user, password);
     }
