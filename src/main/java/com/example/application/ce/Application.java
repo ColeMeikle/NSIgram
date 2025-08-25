@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.page.AppShellConfigurator;
+import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 
 /**
@@ -17,6 +18,11 @@ import com.vaadin.flow.theme.Theme;
 @Theme("my-app")
 @SpringBootApplication(scanBasePackages = "com.example.application")
 @NpmPackage(value = "lumo-css-framework", version = "^4.0.10")
+@PWA(
+    name = "NSIgram",
+    shortName = "NSIgram",
+    iconPath = "logo.png" //relative to frontend
+)
 public class Application implements AppShellConfigurator {
 
     public static void main(String[] args) {

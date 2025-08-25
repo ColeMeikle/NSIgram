@@ -494,8 +494,26 @@ public class MessagesView extends HorizontalLayout implements BeforeEnterObserve
             return userRow;
         });
 
+        Button leaveChat = new Button("Leave Chat");
+        leaveChat.addClassName("leaveChatButton");
+        leaveChat.addClickListener(e -> {
+            dialog.close();
+            toggleActiveChatVisibility(false);
+            UI.getCurrent().navigate("messages/");
 
-        VerticalLayout fieldLayout = new VerticalLayout(updateChatNameContainer, memberLabel, chatMembersGrid, searchField, searchUsersGrid);
+            ChatManagement.removeUserFromChat(currentUser, currentChatID);
+            chatMap.remove(currentChatID);
+
+            List<ChatDisplay> chatList = ChatManagement.getAllChats(currentUser);
+            chatGrid.setItems(chatList);
+        });
+
+        HorizontalLayout leaveChatContainer = new HorizontalLayout(leaveChat);
+        leaveChatContainer.setWidthFull();
+        leaveChatContainer.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+
+
+        VerticalLayout fieldLayout = new VerticalLayout(updateChatNameContainer, memberLabel, chatMembersGrid, searchField, searchUsersGrid, leaveChatContainer);
         fieldLayout.addClassName("editChatLayout");
         fieldLayout.setSpacing(false);
         fieldLayout.setPadding(false);

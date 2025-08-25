@@ -354,4 +354,14 @@
 
 .chatGrid{
     height: calc(100vh - 133px);/*Adjust for height of title and navbar*/
+    max-width: 100%;
+    overflow-x: hidden !important;
+}
+
+.leaveChatButton{
+    --vaadin-button-text-color: red;
+    --vaadin-button-border: solid;
+    --vaadin-button-border-radius: 2px;
+    --vaadin-button-border-color: red;
+    width: max(40%, 100px);
 }

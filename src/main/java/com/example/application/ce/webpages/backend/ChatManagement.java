@@ -394,7 +394,7 @@ public class ChatManagement {
         return users;
     }
 
-    public static void addUserToChat(String name, String chatID, boolean isChatPublic) {
+    public static boolean addUserToChat(String name, String chatID, boolean isChatPublic) {
         String userID = UserManagement.getIDFromUser(name);
         try(Connection conn = Database.getConnection()){
             PreparedStatement checkStmt = conn.prepareStatement("SELECT COUNT(*) FROM chat_members WHERE chat_id = ?::uuid AND user_id = ?::uuid");
@@ -403,19 +403,38 @@ public class ChatManagement {
             ResultSet rs = checkStmt.executeQuery();
             rs.next();
             if(rs.getInt(1) > 0){
-                return;//if the user is already in this chat
+                return false;//if the user is already in this chat
             }
 
             PreparedStatement stmt = conn.prepareStatement("INSERT INTO chat_members (chat_id, user_id) VALUES (?::uuid, ?::uuid)");
             stmt.setString(1, chatID);
             stmt.setString(2, userID);
-            stmt.executeQuery();
+            stmt.executeUpdate();
             if(isChatPublic){
                 PreparedStatement newStmt = conn.prepareStatement("UPDATE chats SET num_members = num_members + 1 WHERE id = ?::uuid");
                 newStmt.setString(1, chatID);
-                newStmt.executeQuery();
+                newStmt.executeUpdate();
             }
+            return true; // User was successfully added
         } catch (Exception e){
+            System.out.println(e);
+            return false;
+        }
+    }
+
+    public static void removeUserFromChat(String name, String chatID){
+        String userID = UserManagement.getIDFromUser(name);
+        try(Connection conn = Database.getConnection()){
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM chat_members WHERE user_id=?::uuid AND chat_id=?::uuid");
+            stmt.setString(1, userID);
+            stmt.setString(2, chatID);
+            stmt.executeUpdate();
+
+            PreparedStatement newStmt = conn.prepareStatement("UPDATE chats SET num_members = num_members - 1 WHERE id = ?::uuid");
+            newStmt.setString(1, chatID);
+            newStmt.executeUpdate();
+        }
+        catch(Exception e){
             System.out.println(e);
         }
     }
@@ -433,7 +452,7 @@ public class ChatManagement {
                 currentUser = (String) VaadinSession.getCurrent().getAttribute("currentUser");
                 creatorID = UserManagement.getIDFromUser(currentUser);
                 creatorThumbnail = UserManagement.getUserProfile(currentUser);
-                stmt = conn.prepareStatement("SELECT chat_name, id, num_members, creator_id FROM chats where public = TRUE AND creator_id = ?::uuid ORDER BY num_members DESC OFFSET ? LIMIT ?");
+                stmt = conn.prepareStatement("SELECT chat_name, id, num_members, creator_id FROM chats WHERE public = TRUE AND creator_id = ?::uuid ORDER BY num_members DESC OFFSET ? LIMIT ?");
                 stmt.setString(1, creatorID);
                 stmt.setInt(2, offset);
                 stmt.setInt(3, limit);
@@ -462,6 +481,109 @@ public class ChatManagement {
                         thumbnail = userRs.getString("profile");
                     }
                 }
+
+                publicChats.add(new PublicChat(thumbnail, name, id, numMembers, creatorId));
+            }
+        } catch (Exception e){
+            System.out.println(e);
+        }
+        return publicChats;
+    }
+
+    // Optimized version with batch queries and caching
+    public static List<PublicChat> getPublicChatsOrderedByMembersOptimized(int offset, int limit, boolean onlyShowUsersChats){
+        List<PublicChat> publicChats = new ArrayList<>();
+        
+        try (Connection conn = Database.getConnection()) {
+            // Use a single query with JOIN to get all data at once
+            String query;
+            if(onlyShowUsersChats){
+                query = "SELECT c.chat_name, c.id, c.num_members, c.creator_id, u.profile " +
+                        "FROM chats c " +
+                        "JOIN users u ON c.creator_id = u.id " +
+                        "WHERE c.public = TRUE AND c.creator_id = ?::uuid " +
+                        "ORDER BY c.num_members DESC OFFSET ? LIMIT ?";
+            } else {
+                query = "SELECT c.chat_name, c.id, c.num_members, c.creator_id, u.profile " +
+                        "FROM chats c " +
+                        "JOIN users u ON c.creator_id = u.id " +
+                        "WHERE c.public = TRUE " +
+                        "ORDER BY c.num_members DESC OFFSET ? LIMIT ?";
+            }
+            
+            PreparedStatement stmt = conn.prepareStatement(query);
+            
+            if(onlyShowUsersChats){
+                String currentUser = (String) VaadinSession.getCurrent().getAttribute("currentUser");
+                String creatorID = UserManagement.getIDFromUser(currentUser);
+                stmt.setString(1, creatorID);
+                stmt.setInt(2, offset);
+                stmt.setInt(3, limit);
+            } else {
+                stmt.setInt(1, offset);
+                stmt.setInt(2, limit);
+            }
+            
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String name = rs.getString("chat_name");
+                String id = rs.getString("id");
+                int numMembers = rs.getInt("num_members");
+                String creatorId = rs.getString("creator_id");
+                String thumbnail = rs.getString("profile");
+
+                publicChats.add(new PublicChat(thumbnail, name, id, numMembers, creatorId));
+            }
+        } catch (Exception e){
+            System.out.println(e);
+            // Fallback to original method if optimized query fails
+            return getPublicChatsOrderedByMembers(offset, limit, onlyShowUsersChats);
+        }
+        return publicChats;
+    }
+
+    // Thread-safe version that doesn't access VaadinSession
+    public static List<PublicChat> getPublicChatsOrderedByMembersOptimized(int offset, int limit, boolean onlyShowUsersChats, String currentUser){
+        List<PublicChat> publicChats = new ArrayList<>();
+        
+        try (Connection conn = Database.getConnection()) {
+            // Use a single query with JOIN to get all data at once
+            String query;
+            if(onlyShowUsersChats){
+                query = "SELECT c.chat_name, c.id, c.num_members, c.creator_id, u.profile " +
+                        "FROM chats c " +
+                        "JOIN users u ON c.creator_id = u.id " +
+                        "WHERE c.public = TRUE AND c.creator_id = ?::uuid " +
+                        "ORDER BY c.num_members DESC OFFSET ? LIMIT ?";
+            } else {
+                query = "SELECT c.chat_name, c.id, c.num_members, c.creator_id, u.profile " +
+                        "FROM chats c " +
+                        "JOIN users u ON c.creator_id = u.id " +
+                        "WHERE c.public = TRUE " +
+                        "ORDER BY c.num_members DESC OFFSET ? LIMIT ?";
+            }
+            
+            PreparedStatement stmt = conn.prepareStatement(query);
+            
+            if(onlyShowUsersChats){
+                String creatorID = UserManagement.getIDFromUser(currentUser);
+                stmt.setString(1, creatorID);
+                stmt.setInt(2, offset);
+                stmt.setInt(3, limit);
+            } else {
+                stmt.setInt(1, offset);
+                stmt.setInt(2, limit);
+            }
+            
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String name = rs.getString("chat_name");
+                String id = rs.getString("id");
+                int numMembers = rs.getInt("num_members");
+                String creatorId = rs.getString("creator_id");
+                String thumbnail = rs.getString("profile");
 
                 publicChats.add(new PublicChat(thumbnail, name, id, numMembers, creatorId));
             }

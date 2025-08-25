@@ -5,14 +5,33 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+@Component
 public class Database {
     // No static connection - create fresh each time
-    //Run in terminal: export $(cat .env | xargs)
+    
+    private static String url;
+    private static String user;
+    private static String password;
+    
+    @Value("${spring.datasource.url}")
+    public void setUrl(String url) {
+        Database.url = url;
+    }
+    
+    @Value("${spring.datasource.username}")
+    public void setUser(String user) {
+        Database.user = user;
+    }
+    
+    @Value("${spring.datasource.password}")
+    public void setPassword(String password) {
+        Database.password = password;
+    }
+    
     public static Connection getConnection() throws SQLException {
-        String url = System.getenv("DB_URL");
-        String user = System.getenv("DB_USER");
-        String password = System.getenv("DB_PASSWORD");
-        
         return DriverManager.getConnection(url, user, password);
     }
 
